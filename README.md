@@ -1,4 +1,4 @@
-WebApp
+Server
 ======
 
 Data Access API
