@@ -10,8 +10,7 @@ entity-exporter/bin
 *.releaseBackup
 *.versionsBackup
 
-# Dojo output and templating
-client/dist
+.DS_Store
 *.tmp
 
 # VIM
