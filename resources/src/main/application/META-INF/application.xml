@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="6"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd">
+    <application-name>resources</application-name>
+    <module>
+        <java>core.jar</java>
+    </module>
+    <module>
+        <java>data.jar</java>
+    </module>
+    <module>
+        <java>util.jar</java>
+    </module>
+    <module>
+        <web>
+            <web-uri>service.war</web-uri>
+            <context-root>/WebApp</context-root>
+        </web>
+    </module>
+    <!--<persistence-context-ref>-->
+    <!--<persistence-context-ref-name>persistence/entityManager</persistence-context-ref-name>-->
+    <!--<persistence-unit-name>WebAppMainPU</persistence-unit-name>-->
+    <!--</persistence-context-ref>-->
+    <!--<persistence-unit-ref>-->
+    <!--<persistence-unit-ref-name>persistence/entityManagerFactory</persistence-unit-ref-name>-->
+    <!--<persistence-unit-name>WebAppMainPU</persistence-unit-name>-->
+    <!--</persistence-unit-ref>-->
+</application>

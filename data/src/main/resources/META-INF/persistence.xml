@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+        http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+    <persistence-unit name="WebAppMainPU" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/WebAppMainDS</jta-data-source>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+
+            <property name="hibernate.cache.infinispan.entity.eviction.strategy" value="LRU"/>
+            <property name="hibernate.cache.infinispan.entity.eviction.max_entries" value="15000"/>
+            <property name="hibernate.cache.infinispan.entity.expiration.wake_up_interval" value="20000"/>
+            <property name="hibernate.cache.infinispan.entity.expiration.lifespan" value="120000"/>
+            <property name="hibernate.cache.infinispan.entity.expiration.max_idle" value="30000"/>
+
+            <property name="hibernate.jdbc.use_streams_for_binary" value="true"/>
+            <property name="hibernate.max_fetch_depth" value="3"/>
+            <property name="hibernate.default_batch_fetch_size" value="8"/>
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+
+            <property name="jboss.entity.manager.jndi.name" value="java:/MainEntityManager"/>
+            <property name="jboss.entity.manager.factory.jndi.name" value="java:/MainEntityManagerFactory"/>
+
+
+            <!--<property name="hibernate.ejb.event.post-load" value="com.youthclub.data.listener.SecurityListener"/>-->
+        </properties>
+    </persistence-unit>
+</persistence>

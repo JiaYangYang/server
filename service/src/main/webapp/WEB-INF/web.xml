@@ -1,0 +1,23 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <display-name>WebApp</display-name>
+    <!--<distributable />-->
+
+    <!-- servlet definition -->
+    <servlet>
+        <servlet-name>ServletExceptionHandler</servlet-name>
+        <servlet-class>com.youthclub.servlet.ServletExceptionHandler</servlet-class>
+    </servlet>
+    <!-- servlet mappings -->
+    <servlet-mapping>
+        <servlet-name>ServletExceptionHandler</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type >
+        <location>/error</location>
+    </error-page>
+</web-app>

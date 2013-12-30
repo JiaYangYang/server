@@ -1,0 +1,37 @@
+# System specific config
+build.properties
+deploy.properties
+
+# Ant && Maven output
+src/generated
+target
+test-output
+entity-exporter/bin
+*.releaseBackup
+*.versionsBackup
+
+# Dojo output and templating
+client/dist
+*.tmp
+
+# VIM
+*.swp
+
+# JOE
+*~
+
+# IDEA
+*.iml
+*.ipr
+*.iws
+.idea/
+idea
+
+# Eclipse
+.metadata
+.project
+.settings
+
+# Garbage
+java_pid*
+
