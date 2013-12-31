@@ -7,4 +7,4 @@ rm *.*~
 rm -rf *.iml
 rm -rf */*.iml
 
-tar -czf WebApp.tar *
+tar -czf server.tar *

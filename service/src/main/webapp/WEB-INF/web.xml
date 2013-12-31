@@ -2,7 +2,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
-    <display-name>WebApp</display-name>
+    <display-name>server</display-name>
     <!--<distributable />-->
 
     <!-- servlet definition -->
@@ -10,6 +10,7 @@
         <servlet-name>ServletExceptionHandler</servlet-name>
         <servlet-class>com.youthclub.servlet.ServletExceptionHandler</servlet-class>
     </servlet>
+
     <!-- servlet mappings -->
     <servlet-mapping>
         <servlet-name>ServletExceptionHandler</servlet-name>

@@ -15,7 +15,7 @@
     <module>
         <web>
             <web-uri>service.war</web-uri>
-            <context-root>/WebApp</context-root>
+            <context-root>/server</context-root>
         </web>
     </module>
     <!--<persistence-context-ref>-->

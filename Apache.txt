@@ -3,8 +3,8 @@
     #SSLCertificateFile /etc/apache2/ssl/apache.pem
     #SSLCertificateKeyFile /etc/apache2/ssl/apache.key
 
-	ProxyPass /WebApp/rest ajp://localhost:8009/server/rest
-	ProxyPassReverse /WebApp/rest ajp://localhost:8009/server/rest
+	ProxyPass /server/rest ajp://localhost:8009/server/rest
+	ProxyPassReverse /server/rest ajp://localhost:8009/server/rest
 
 	ServerAdmin webmaster@localhost
 	DocumentRoot /home/frank/www
