@@ -4,11 +4,7 @@ import com.youthclub.annotation.RolesAllowed;
 import com.youthclub.model.User;
 import com.youthclub.model.support.RoleType;
 import com.youthclub.path.EntityPaths;
-import com.youthclub.persister.AbstractPersister;
-import com.youthclub.persister.UserPersister;
-import com.youthclub.persister.UserRolePersister;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -34,15 +30,9 @@ public class UserPaths extends EntityPaths<User> {
 
     public static final String PATH = "user";
 
-    @Inject
-    private UserPersister userPersister;
-
-    @Inject
-    private UserRolePersister userRolePersister;
-
     @Override
-    protected AbstractPersister<User> getPersister() {
-        return userPersister;
+    protected Class<User> getEntityClass() {
+        return User.class;
     }
 
     @GET
@@ -70,8 +60,8 @@ public class UserPaths extends EntityPaths<User> {
     @PUT
     @Path(BY_ID)
     @Produces(APPLICATION_JSON)
-    public Response get(@PathParam(ID) final String id, final User that) {
-        return super.get(id, that);
+    public Response put(@PathParam(ID) final String id, final User that) {
+        return super.put(id, that);
     }
 
     @DELETE

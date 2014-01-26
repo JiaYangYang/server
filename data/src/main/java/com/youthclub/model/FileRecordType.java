@@ -3,6 +3,8 @@ package com.youthclub.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,15 +15,16 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "file_record_type", schema = "public", catalog = "web_app")
-public class FileRecordType {
+public class FileRecordType extends EntityBase<FileRecordType> {
     private int id;
     private String name;
     private String entity;
     private String directory;
-    private Collection<FileRecord> fileRecordsById;
+    private Collection<FileRecord> fileRecords;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -60,36 +63,12 @@ public class FileRecordType {
         this.directory = directory;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FileRecordType that = (FileRecordType) o;
-
-        if (id != that.id) return false;
-        if (directory != null ? !directory.equals(that.directory) : that.directory != null) return false;
-        if (entity != null ? !entity.equals(that.entity) : that.entity != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-        return true;
+    @OneToMany(mappedBy = "fileRecordType")
+    public Collection<FileRecord> getFileRecords() {
+        return fileRecords;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (entity != null ? entity.hashCode() : 0);
-        result = 31 * result + (directory != null ? directory.hashCode() : 0);
-        return result;
-    }
-
-    @OneToMany(mappedBy = "fileRecordTypeByFileRecordTypeId")
-    public Collection<FileRecord> getFileRecordsById() {
-        return fileRecordsById;
-    }
-
-    public void setFileRecordsById(Collection<FileRecord> fileRecordsById) {
-        this.fileRecordsById = fileRecordsById;
+    public void setFileRecords(Collection<FileRecord> fileRecords) {
+        this.fileRecords = fileRecords;
     }
 }

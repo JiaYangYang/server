@@ -2,19 +2,19 @@ package com.youthclub.serializer;
 
 import com.youthclub.annotation.Internal;
 import com.youthclub.annotation.support.AccessLevel;
-import gnu.trove.map.TMap;
 import com.youthclub.model.EntityBase;
 import com.youthclub.model.support.RestfulEnum;
+import com.youthclub.permission.ViewPermissionChecker;
+import com.youthclub.support.MapEntry;
+import com.youthclub.support.PathUtil;
+import com.youthclub.support.ProxyUtil;
+import gnu.trove.map.TMap;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jboss.logging.Logger;
-import com.youthclub.permission.ViewPermissionChecker;
-import com.youthclub.support.MapEntry;
-import com.youthclub.support.PathUtil;
-import com.youthclub.support.ProxyUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

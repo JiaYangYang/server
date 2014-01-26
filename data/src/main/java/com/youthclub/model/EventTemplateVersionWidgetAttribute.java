@@ -3,6 +3,8 @@ package com.youthclub.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "event_template_version_widget_attribute", schema = "public", catalog = "web_app")
-public class EventTemplateVersionWidgetAttribute {
+public class EventTemplateVersionWidgetAttribute extends EntityBase<EventTemplateVersionWidgetAttribute> {
     private int id;
     private String value;
     private EventTemplateVersionWidget eventTemplateVersionWidget;
@@ -21,6 +23,7 @@ public class EventTemplateVersionWidgetAttribute {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

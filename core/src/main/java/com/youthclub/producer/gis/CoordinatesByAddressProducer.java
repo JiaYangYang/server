@@ -1,13 +1,13 @@
 package com.youthclub.producer.gis;
 
-import gnu.trove.map.TMap;
+import com.youthclub.cache.TreeCaches;
 import com.youthclub.producer.Producer;
 import com.youthclub.producer.ProducerResolver;
-import com.youthclub.cache.TreeCaches;
-import org.infinispan.tree.Fqn;
-import org.infinispan.tree.TreeCache;
 import com.youthclub.view.AddressView;
 import com.youthclub.view.CoordinatesView;
+import gnu.trove.map.TMap;
+import org.infinispan.tree.Fqn;
+import org.infinispan.tree.TreeCache;
 
 import java.io.BufferedReader;
 import java.io.IOException;

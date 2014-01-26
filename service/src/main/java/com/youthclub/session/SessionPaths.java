@@ -3,11 +3,9 @@ package com.youthclub.session;
 import com.youthclub.authentication.Authenticator;
 import com.youthclub.authentication.PasswordAuthenticator;
 import com.youthclub.lookup.GlobalDefinition;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import com.youthclub.persister.UserPersister;
 import com.youthclub.resource.LookUpExtension;
+import org.jboss.resteasy.annotations.cache.NoCache;
 
-import javax.inject.Inject;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,9 +31,6 @@ public class SessionPaths {
     public static final String LOGIN_PATH = "login";
     public static final String LOGOUT_PATH = "logout";
     public static final String STATUS_PATH = "status";
-
-    @Inject
-    private UserPersister userPersister;
 
     @POST
     @Path(LOGIN_PATH)

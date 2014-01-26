@@ -1,9 +1,9 @@
 package com.youthclub.authentication;
 
+import com.youthclub.lookup.GlobalDefinition;
 import com.youthclub.model.User;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-import com.youthclub.lookup.GlobalDefinition;
 import org.jboss.logging.Logger;
 
 /**

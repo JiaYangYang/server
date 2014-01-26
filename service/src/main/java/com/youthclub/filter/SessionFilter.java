@@ -6,14 +6,14 @@ import com.youthclub.authentication.PasswordAuthenticator;
 import com.youthclub.lookup.GlobalDefinition;
 import com.youthclub.lookup.LookUp;
 import com.youthclub.model.User;
-import org.jboss.logging.Logger;
 import com.youthclub.path.ApplicationPath;
-import com.youthclub.persister.UserPersister;
 import com.youthclub.resource.LookUpExtension;
 import com.youthclub.resource.ResourceHolder;
 import com.youthclub.session.SessionPaths;
 import com.youthclub.web.CookieUtil;
+import org.jboss.logging.Logger;
 
+import javax.persistence.NoResultException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -69,9 +69,19 @@ public class SessionFilter implements Filter {
         }
     }
 
+    private User findByIp(String ip) {
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("User.findByIp", User.class)
+                    .setParameter("ip", ip)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
     private Authenticator createAuthenticator(String ip, String userAgent, String sessionId) {
-        final UserPersister userPersister = LookUpExtension.getPersister(UserPersister.class);
-        final User user = userPersister.findByIp(ip);
+        final User user = findByIp(ip);
         Authenticator authenticator = null;
         if (user != null) {
             authenticator = new IPAuthenticator();

@@ -3,6 +3,8 @@ package com.youthclub.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,7 +15,7 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "event_template_widget_type", schema = "public")
-public class EventTemplateWidgetType {
+public class EventTemplateWidgetType extends EntityBase<EventTemplateWidgetType> {
     private int id;
     private String name;
     private String label;
@@ -27,6 +29,7 @@ public class EventTemplateWidgetType {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -104,7 +107,7 @@ public class EventTemplateWidgetType {
         this.eventTemplateVersionWidgets = eventTemplateVersionWidgets;
     }
 
-    @OneToMany(mappedBy = "eventTemplateWidgetTypeAttribute")
+    @OneToMany(mappedBy = "eventTemplateWidgetTypeForTemplate")
     public Collection<EventTemplateWidgetTypeAttribute> getEventTemplateWidgetTypeAttributesForTemplate() {
         return eventTemplateWidgetTypeAttributesForTemplate;
     }
@@ -113,7 +116,7 @@ public class EventTemplateWidgetType {
         this.eventTemplateWidgetTypeAttributesForTemplate = eventTemplateWidgetTypeAttributesForTemplate;
     }
 
-    @OneToMany(mappedBy = "eventTemplateWidgetTypeAttribute")
+    @OneToMany(mappedBy = "eventTemplateWidgetTypeForWidget")
     public Collection<EventTemplateWidgetTypeAttribute> getEventTemplateWidgetTypeAttributesForWidget() {
         return eventTemplateWidgetTypeAttributesForWidget;
     }

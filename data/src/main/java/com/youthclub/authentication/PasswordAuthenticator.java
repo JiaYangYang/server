@@ -1,14 +1,12 @@
 package com.youthclub.authentication;
 
-import com.youthclub.model.UserLog;
-import com.youthclub.persister.UserLogPersister;
+import com.youthclub.lookup.LookUp;
 import com.youthclub.model.Session;
 import com.youthclub.model.User;
-import com.youthclub.persister.SessionPersister;
-import com.youthclub.persister.UserPersister;
-import com.youthclub.resource.LookUpExtension;
+import com.youthclub.model.UserLog;
 import com.youthclub.util.Encryption;
 
+import javax.persistence.NoResultException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,16 +15,35 @@ import java.util.Date;
  */
 public class PasswordAuthenticator extends Authenticator {
 
-    private UserPersister userPersister = LookUpExtension.getPersister(UserPersister.class);
-
-    private UserLogPersister userLogPersister = LookUpExtension.getPersister(UserLogPersister.class);
-
-    private SessionPersister sessionPersister = LookUpExtension.getPersister(SessionPersister.class);
-
 
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String SESSION_ID = "sessionId";
+
+    private User login(String username, String password) {
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("User.login", User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    private Session getCurrentSession(String ip, String sessionId) {
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("Session.currentSession", Session.class)
+                    .setParameter("sessionId", sessionId)
+                    .setParameter("ip", ip)
+                    .setParameter("expireTime", new Date())
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
 
     @Override
     public User doAuthenticate() {
@@ -37,7 +54,7 @@ public class PasswordAuthenticator extends Authenticator {
         final String sessionId = params.get(SESSION_ID);
         final String userAgent = params.get(USER_AGENT);
 
-        final User user = userPersister.login(username, Encryption.encryptPassword(username, password));
+        final User user = login(username, Encryption.encryptPassword(username, password));
         if (user == null) {
             return null;
         }
@@ -56,8 +73,8 @@ public class PasswordAuthenticator extends Authenticator {
         userLog.setIp(ip);
         userLog.setUserAgent(userAgent);
 
-        userLogPersister.save(userLog);
-        sessionPersister.save(session);
+        LookUp.getEntityManager().persist(userLog);
+        LookUp.getEntityManager().persist(session);
 
         return user;
     }
@@ -73,9 +90,22 @@ public class PasswordAuthenticator extends Authenticator {
             return null;
         }
 
-        Session session = sessionPersister.getCurrentSession(ip, sessionId);
+        Session session = getCurrentSession(ip, sessionId);
         currentUser = session == null ? null : session.getUser();
         return currentUser;
+    }
+
+    private UserLog getCurrentUserLog(User user, String ip) {
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("UserLog.withUserAndIp", UserLog.class)
+                    .setParameter("user", user)
+                    .setParameter("ip", ip)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -86,8 +116,8 @@ public class PasswordAuthenticator extends Authenticator {
         if (sessionId == null) {
             return true;
         }
-        Session session = sessionPersister.getCurrentSession(ip, sessionId);
-        UserLog userLog = userLogPersister.getCurrentUserLog(session.getUser(), ip);
+        Session session = getCurrentSession(ip, sessionId);
+        UserLog userLog = getCurrentUserLog(session.getUser(), ip);
 
         if (session == null || userLog == null) {
             return true;
@@ -107,7 +137,7 @@ public class PasswordAuthenticator extends Authenticator {
         if (sessionId == null) {
             return false;
         }
-        Session session = sessionPersister.getCurrentSession(ip, sessionId);
+        Session session = getCurrentSession(ip, sessionId);
         if (session == null) {
             return false;
         }

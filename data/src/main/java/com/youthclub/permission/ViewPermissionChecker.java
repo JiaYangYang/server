@@ -3,9 +3,9 @@ package com.youthclub.permission;
 import com.youthclub.annotation.AttributeAccess;
 import com.youthclub.annotation.support.AccessLevel;
 import com.youthclub.annotation.support.Permission;
+import com.youthclub.lookup.LookUp;
 import com.youthclub.model.User;
 import com.youthclub.model.support.RoleType;
-import com.youthclub.persister.UserRolePersister;
 import com.youthclub.resource.LookUpExtension;
 
 import java.lang.reflect.Method;
@@ -52,7 +52,9 @@ public class ViewPermissionChecker {
         if (user == null) {
             return Collections.<RoleType>emptyList();
         }
-        final UserRolePersister userRolePersister = LookUpExtension.getPersister(UserRolePersister.class);
-        return userRolePersister.roleTypes(user);
+        return LookUp.getEntityManager()
+                .createNamedQuery("UserRole.roleTypeWithUser", RoleType.class)
+                .setParameter("user", user)
+                .getResultList();
     }
 }

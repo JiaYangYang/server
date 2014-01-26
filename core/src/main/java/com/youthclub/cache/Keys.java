@@ -1,7 +1,7 @@
 package com.youthclub.cache;
 
-import org.infinispan.tree.Fqn;
 import com.youthclub.view.CoordinatesView;
+import org.infinispan.tree.Fqn;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -7,20 +7,6 @@
 
     <persistence-unit name="WebAppMainPU" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/WebAppMainDS</jta-data-source>
-        <class>com.youthclub.model.EventInstance</class>
-        <class>com.youthclub.model.EventTemplate</class>
-        <class>com.youthclub.model.EventTemplateVersion</class>
-        <class>com.youthclub.model.EventTemplateVersionWidget</class>
-        <class>com.youthclub.model.EventTemplateVersionWidgetAttribute</class>
-        <class>com.youthclub.model.EventTemplateWidgetType</class>
-        <class>com.youthclub.model.EventTemplateWidgetTypeAttribute</class>
-        <class>com.youthclub.model.EventType</class>
-        <class>com.youthclub.model.FileRecord</class>
-        <class>com.youthclub.model.FileRecordType</class>
-        <class>com.youthclub.model.Session</class>
-        <class>com.youthclub.model.User</class>
-        <class>com.youthclub.model.UserLog</class>
-        <class>com.youthclub.model.UserRole</class>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>

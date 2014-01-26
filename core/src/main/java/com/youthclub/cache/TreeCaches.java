@@ -1,12 +1,12 @@
 package com.youthclub.cache;
 
+import com.youthclub.util.Reference;
 import org.infinispan.configuration.cache.Configuration;
 import org.infinispan.eviction.EvictionStrategy;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.tree.TreeCache;
 import org.infinispan.tree.TreeCacheFactory;
-import com.youthclub.util.Reference;
 
 import java.util.concurrent.TimeUnit;
 

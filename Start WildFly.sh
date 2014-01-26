@@ -21,5 +21,6 @@ export JAVA_OPTS
 cd $PROJECT_HOME
 mvn clean install -Dmaven.test.skip=true
 ln -s $PROJECT_HOME/resources/target/$PROJECT_NAME.ear $JBOSS_HOME/standalone/deployments/$PROJECT_NAME.ear
+rm $JBOSS_HOME/standalone/deployments/*.jar.*
 
 $JBOSS_HOME/bin/standalone.sh

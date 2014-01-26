@@ -1,11 +1,10 @@
 package com.youthclub.authentication;
 
-import com.youthclub.model.UserLog;
-import com.youthclub.persister.UserLogPersister;
+import com.youthclub.lookup.LookUp;
 import com.youthclub.model.User;
-import com.youthclub.persister.UserPersister;
-import com.youthclub.resource.LookUpExtension;
+import com.youthclub.model.UserLog;
 
+import javax.persistence.NoResultException;
 import java.util.Date;
 
 /**
@@ -13,14 +12,21 @@ import java.util.Date;
  */
 public class IPAuthenticator extends Authenticator {
 
-    private UserPersister userPersister = LookUpExtension.getPersister(UserPersister.class);
-
-    private UserLogPersister userLogPersister = LookUpExtension.getPersister(UserLogPersister.class);
+    private User findByIp(String ip) {
+        try{
+        return LookUp.getEntityManager()
+                .createNamedQuery("User.findByIp", User.class)
+                .setParameter("ip", ip)
+                .getSingleResult();
+        }catch (NoResultException ex){
+            return null;
+        }
+    }
 
     @Override
     public User doAuthenticate() {
         final String ip = params.get(IP);
-        final User user = userPersister.findByIp(ip);
+        final User user = findByIp(ip);
         if (user == null) {
             return null;
         }
@@ -41,14 +47,26 @@ public class IPAuthenticator extends Authenticator {
             return currentUser;
         }
         final String ip = params.get(IP);
-        currentUser = userPersister.findByIp(ip);
+        currentUser = findByIp(ip);
         return currentUser;
+    }
+
+    private UserLog getCurrentUserLog(String ip) {
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("UserLog.withIp", UserLog.class)
+                    .setParameter("ip", ip)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Override
     public boolean doLogout() {
         final String ip = params.get(IP);
-        UserLog userLog = userLogPersister.getCurrentUserLog(ip);
+        UserLog userLog = getCurrentUserLog(ip);
         if (userLog == null) {
             return true;
         }
@@ -60,10 +78,10 @@ public class IPAuthenticator extends Authenticator {
         final String ip = params.get(IP);
         final String userAgent = params.get(USER_AGENT);
 
-        UserLog userLog = userLogPersister.getCurrentUserLog(ip);
+        UserLog userLog = getCurrentUserLog(ip);
         final Date date = new Date();
         if (userLog == null) {
-            User user = userPersister.findByIp(ip);
+            User user = findByIp(ip);
             if (user == null) {
                 return false;
             }
@@ -71,7 +89,7 @@ public class IPAuthenticator extends Authenticator {
             userLog.setUser(user);
             userLog.setIp(ip);
             userLog.setLoginTime(date);
-            userLogPersister.save(userLog);
+            LookUp.getEntityManager().persist(userLog);
         }
         userLog.setUserAgent(userAgent);
         userLog.setLogoutTime(date);

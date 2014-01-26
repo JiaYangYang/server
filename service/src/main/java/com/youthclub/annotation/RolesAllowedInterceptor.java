@@ -1,11 +1,11 @@
 package com.youthclub.annotation;
 
 import com.youthclub.authentication.Authenticator;
+import com.youthclub.lookup.LookUp;
 import com.youthclub.model.User;
 import com.youthclub.model.support.RoleType;
-import org.jboss.resteasy.spi.UnauthorizedException;
-import com.youthclub.persister.UserRolePersister;
 import com.youthclub.resource.LookUpExtension;
+import org.jboss.resteasy.spi.UnauthorizedException;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -39,8 +39,11 @@ public class RolesAllowedInterceptor implements Serializable {
         if (roleTypesAllowed.contains(RoleType.ALL)) {
             return invocationContext.proceed();
         }
-        final UserRolePersister userRolePersister = LookUpExtension.getPersister(UserRolePersister.class);
-        List<RoleType> userRoleTypes = userRolePersister.roleTypes(user);
+
+        List<RoleType> userRoleTypes = LookUp.getEntityManager()
+                .createNamedQuery("UserRole.roleTypeWithUser", RoleType.class)
+                .setParameter("user", user)
+                .getResultList();
         for (RoleType userRoleType : userRoleTypes) {
             for (RoleType roleTypeAllowed : roleTypesAllowed) {
                 if (userRoleType == roleTypeAllowed) {
