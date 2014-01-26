@@ -181,9 +181,9 @@ public class ViewSerializer<T> extends JsonSerializer<T> {
     }
 
     private Collection convertMap(Map map) {
-        Collection ret = new ArrayList();
-        Set<Map.Entry> set = map.entrySet();
-        Iterator<Map.Entry> it = set.iterator();
+        final Collection ret = new ArrayList();
+        final Set<Map.Entry> set = map.entrySet();
+        final Iterator<Map.Entry> it = set.iterator();
         while (it.hasNext()) {
             Map.Entry entry = it.next();
             MapEntry e = new MapEntry()

@@ -23,7 +23,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "Session.findAll", query = "SELECT s FROM Session s"),
         @NamedQuery(name = "Session.currentSession", query = "SELECT e FROM Session e WHERE e.sessionId=:sessionId AND e.ip=:ip and e.expireTime>=:expireTime"),
-        @NamedQuery(name = "Session.beforeDate", query = "DELETE FROM Session e WHERE e.lastRequest<=:date")
+        @NamedQuery(name = "Session.beforeDate", query = "SELECT e FROM Session e WHERE e.lastRequest<=:date")
 })
 public class Session extends EntityBase<Session> {
     private static final long serialVersionUID = 1L;
