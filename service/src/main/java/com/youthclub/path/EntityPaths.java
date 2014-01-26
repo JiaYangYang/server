@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> {
 
     private static final Logger log = Logger.getLogger(EntityPaths.class.getName());
-    protected Class<T> entityClass;
 
     public static final String ID = "id";
     public static final String BY_ID = "/{id}";
@@ -29,10 +28,24 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
 
     protected abstract Class<T> getEntityClass();
 
+    protected T getById(final int id) {
+        return LookUp.getEntityManager().find(getEntityClass(), id);
+    }
+
+    protected T getById(final String id) {
+        final int entityId;
+        try {
+            entityId = Integer.parseInt(id);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+        return getById(entityId);
+    }
+
     public Response get() {
         final EntityManager entityManager = LookUp.getEntityManager();
         javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entityClass));
+        cq.select(cq.from(getEntityClass()));
         return Response.ok(entityManager.createQuery(cq).getResultList()).build();
     }
 
@@ -43,27 +56,17 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
     }
 
     public Response get(@PathParam(ID) final String id) {
-        final int entityId;
-        try {
-            entityId = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        return Response.ok(
-                LookUp.getEntityManager().find(entityClass, entityId)
-        ).build();
+        return Response.ok(getById(id)).build();
     }
 
     public Response put(@PathParam(ID) final String id, final T that) {
-        final int entityId;
-        try {
-            entityId = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        final T entity = getById(id);
+        if (entity == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         final EntityManager entityManager = LookUp.getEntityManager();
-        if (entityManager.find(entityClass, entityId, LockModeType.PESSIMISTIC_WRITE) != null) {
+        if (entityManager.find(getEntityClass(), entity.getId(), LockModeType.PESSIMISTIC_WRITE) != null) {
             entityManager.merge(that);
             entityManager.flush();
         }
@@ -72,15 +75,13 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
     }
 
     public Response delete(@PathParam(ID) final String id) {
-        final int entityId;
-        try {
-            entityId = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        final T that = getById(id);
+        if (that == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         final EntityManager entityManager = LookUp.getEntityManager();
-        final T entity = entityManager.find(entityClass, entityId, LockModeType.PESSIMISTIC_WRITE);
+        final T entity = entityManager.find(getEntityClass(), that.getId(), LockModeType.PESSIMISTIC_WRITE);
         if (entity != null) {
             entityManager.remove(entity);
             entityManager.flush();
@@ -89,35 +90,25 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
     }
 
     public Response getField(@PathParam(ID) final String id, @PathParam(FIELD) final String fieldName) {
-        final int entityId;
-        try {
-            entityId = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        final EntityBase entity = LookUp.getEntityManager().find(entityClass, entityId);
-        if (entity == null) {
+        final T that = getById(id);
+        if (that == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok(getFieldValue(entity, fieldName)).build();
+        return Response.ok(getFieldValue(that, fieldName)).build();
     }
 
     public Response setField(@PathParam(ID) final String id, @PathParam(FIELD) final String fieldName, final T that) {
-        final int entityId;
-        try {
-            entityId = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        final EntityManager entityManager = LookUp.getEntityManager();
-        final EntityBase entity = entityManager.find(entityClass, entityId, LockModeType.PESSIMISTIC_WRITE);
-        if (entity == null) {
+        final T e = getById(id);
+        if (e == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        setFieldValue(entity, fieldName, that);
-        entityManager.flush();
+        final EntityManager entityManager = LookUp.getEntityManager();
+        final EntityBase entity = entityManager.find(getEntityClass(), e.getId(), LockModeType.PESSIMISTIC_WRITE);
+        if (entity != null) {
+            setFieldValue(entity, fieldName, that);
+            entityManager.flush();
+        }
 
         return Response.ok().build();
     }

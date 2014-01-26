@@ -35,7 +35,6 @@ public class UserRole extends EntityBase<UserRole> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     public int getId() {
         return id;

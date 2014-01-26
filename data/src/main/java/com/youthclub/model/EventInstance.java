@@ -9,7 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * Created by frank on 14-1-26.
@@ -46,7 +48,8 @@ public class EventInstance extends EntityBase<EventInstance> {
     }
 
     @Basic
-    @Column(name = "created")
+    @Column(name = "created", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getCreated() {
         return created;
     }
@@ -57,6 +60,7 @@ public class EventInstance extends EntityBase<EventInstance> {
 
     @Basic
     @Column(name = "disabled")
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDisabled() {
         return disabled;
     }

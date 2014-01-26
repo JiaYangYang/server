@@ -39,18 +39,17 @@ public class UserLog extends EntityBase<UserLog> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     public int getId() {
         return id;
     }
 
-    @Basic(optional = false)
-    @Column(name = "ip")
     public void setId(int id) {
         this.id = id;
     }
 
+    @Basic(optional = false)
+    @Column(name = "ip")
     public String getIp() {
         return ip;
     }

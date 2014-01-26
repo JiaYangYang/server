@@ -27,33 +27,18 @@ import java.util.Date;
 })
 public class Session extends EntityBase<Session> {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
+
     private int id;
-    @Basic(optional = false)
-    @Column(name = "ip")
     private String ip;
-    @Basic(optional = false)
-    @Column(name = "session_id")
     private String sessionId;
-    @Basic(optional = false)
-    @Column(name = "start_time")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
-    @Basic(optional = false)
-    @Column(name = "expire_time")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date expireTime;
-    @Basic(optional = false)
-    @Column(name = "last_request")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date lastRequest;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne
     private User user;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -62,6 +47,8 @@ public class Session extends EntityBase<Session> {
         this.id = id;
     }
 
+    @Basic(optional = false)
+    @Column(name = "ip")
     public String getIp() {
         return ip;
     }
@@ -70,6 +57,8 @@ public class Session extends EntityBase<Session> {
         this.ip = ip;
     }
 
+    @Basic(optional = false)
+    @Column(name = "session_id")
     public String getSessionId() {
         return sessionId;
     }
@@ -78,6 +67,9 @@ public class Session extends EntityBase<Session> {
         this.sessionId = sessionId;
     }
 
+    @Basic(optional = false)
+    @Column(name = "start_time")
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getStartTime() {
         return startTime;
     }
@@ -86,6 +78,9 @@ public class Session extends EntityBase<Session> {
         this.startTime = startTime;
     }
 
+    @Basic(optional = false)
+    @Column(name = "expire_time")
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getExpireTime() {
         return expireTime;
     }
@@ -94,6 +89,9 @@ public class Session extends EntityBase<Session> {
         this.expireTime = expireTime;
     }
 
+    @Basic(optional = false)
+    @Column(name = "last_request")
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getLastRequest() {
         return lastRequest;
     }
@@ -102,6 +100,8 @@ public class Session extends EntityBase<Session> {
         this.lastRequest = lastRequest;
     }
 
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne
     public User getUser() {
         return user;
     }

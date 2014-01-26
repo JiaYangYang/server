@@ -14,7 +14,7 @@ import java.util.Collection;
  * Created by frank on 14-1-26.
  */
 @Entity
-@Table(name = "file_record_type", schema = "public", catalog = "web_app")
+@Table(name = "file_record_type", schema = "public")
 public class FileRecordType extends EntityBase<FileRecordType> {
     private int id;
     private String name;

@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * Created by frank on 14-1-26.
  */
 @Entity
-@Table(name = "event_template_version_widget_attribute", schema = "public", catalog = "web_app")
+@Table(name = "event_template_version_widget_attribute", schema = "public")
 public class EventTemplateVersionWidgetAttribute extends EntityBase<EventTemplateVersionWidgetAttribute> {
     private int id;
     private String value;

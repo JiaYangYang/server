@@ -10,7 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.sql.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.Collection;
 
 /**
@@ -49,6 +51,7 @@ public class EventTemplate extends EntityBase<EventTemplate> {
 
     @Basic
     @Column(name = "disabled")
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDisabled() {
         return disabled;
     }

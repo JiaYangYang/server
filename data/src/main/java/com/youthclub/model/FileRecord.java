@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * Created by frank on 14-1-26.
  */
 @Entity
-@Table(name = "file_record", schema = "public", catalog = "web_app")
+@Table(name = "file_record", schema = "public")
 public class FileRecord extends EntityBase<FileRecord> {
     private int id;
     private Integer entityId;
