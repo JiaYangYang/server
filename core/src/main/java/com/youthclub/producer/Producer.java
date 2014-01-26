@@ -78,7 +78,7 @@ public class Producer<K, V> {
         return this;
     }
 
-    public Producer addParam(String key, Object value){
+    public Producer addParam(String key, Object value) {
         this.params.put(key, value);
         return this;
     }

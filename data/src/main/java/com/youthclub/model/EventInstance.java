@@ -16,7 +16,7 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "event_instance", schema = "public")
-public class EventInstance extends EntityBase<EventInstance>{
+public class EventInstance extends EntityBase<EventInstance> {
     private int id;
     private String name;
     private Date created;

@@ -41,15 +41,15 @@ public enum TreeCaches {
         this.configuration.set(configuration);
     }
 
-    public synchronized <K,V> TreeCache<K,V> getCache() {
+    public synchronized <K, V> TreeCache<K, V> getCache() {
         return internalGetCache(this.region);
     }
 
-    public synchronized <K,V> TreeCache<K,V> getCache(final String region) {
+    public synchronized <K, V> TreeCache<K, V> getCache(final String region) {
         return internalGetCache(this.region + region);
     }
 
-    private synchronized <K,V> TreeCache<K,V> internalGetCache(final String region) {
+    private synchronized <K, V> TreeCache<K, V> internalGetCache(final String region) {
         if (cache.get() == null) {
             final EmbeddedCacheManager manager = getCacheManager();
             this.cache.set(new TreeCacheFactory().createTreeCache(manager.getCache(region, true)));

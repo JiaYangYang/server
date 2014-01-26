@@ -27,7 +27,7 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
     public static final String FIELD = "field";
     public static final String FIELD_NAME = "/{field}";
 
-    protected abstract Class<T> getEntityClass() ;
+    protected abstract Class<T> getEntityClass();
 
     public Response get() {
         final EntityManager entityManager = LookUp.getEntityManager();

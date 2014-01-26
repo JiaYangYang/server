@@ -13,12 +13,12 @@ import java.util.Date;
 public class IPAuthenticator extends Authenticator {
 
     private User findByIp(String ip) {
-        try{
-        return LookUp.getEntityManager()
-                .createNamedQuery("User.findByIp", User.class)
-                .setParameter("ip", ip)
-                .getSingleResult();
-        }catch (NoResultException ex){
+        try {
+            return LookUp.getEntityManager()
+                    .createNamedQuery("User.findByIp", User.class)
+                    .setParameter("ip", ip)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
             return null;
         }
     }
