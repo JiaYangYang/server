@@ -2,6 +2,7 @@ package com.youthclub.path.model;
 
 import com.youthclub.annotation.RolesAllowed;
 import com.youthclub.authentication.Authenticator;
+import com.youthclub.lookup.LookUp;
 import com.youthclub.model.EventType;
 import com.youthclub.model.support.RoleType;
 import com.youthclub.path.EntityPaths;
@@ -32,10 +33,22 @@ public class EventTypePaths extends EntityPaths<EventType> {
     private static final Logger log = Logger.getLogger(EventTypePaths.class.getName());
 
     public static final String PATH = "event_type";
+    public static final String ACTIVE = "active";
 
     @Override
     protected Class<EventType> getEntityClass() {
         return EventType.class;
+    }
+
+    @GET
+    @Path(ACTIVE)
+    @Produces(APPLICATION_JSON)
+    public Response active() {
+        return Response.ok(
+                LookUp.getEntityManager()
+                        .createNamedQuery("EventType.active")
+                        .getResultList()
+        ).build();
     }
 
     @GET

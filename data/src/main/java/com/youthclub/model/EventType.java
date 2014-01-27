@@ -8,18 +8,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
 import java.util.Collection;
+import java.util.Date;
 
 /**
- * Created by frank on 14-1-26.
+ * @author Frank <frank@baileyroberts.com.au>
  */
 @Entity
 @Table(name = "event_type", schema = "public")
+@NamedQueries({
+        @NamedQuery(name = "EventType.active", query = "SELECT e FROM EventType e WHERE e.disabled is null order by e.id")
+})
 public class EventType extends EntityBase<EventType> {
     private int id;
     private String name;
