@@ -66,12 +66,10 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
         }
 
         final EntityManager entityManager = LookUp.getEntityManager();
-        if (entityManager.find(getEntityClass(), entity.getId(), LockModeType.PESSIMISTIC_WRITE) != null) {
-            entityManager.merge(that);
-            entityManager.flush();
-        }
-
-        return Response.ok().build();
+        entityManager.lock(entity, LockModeType.PESSIMISTIC_WRITE);
+        entityManager.merge(that);
+        entityManager.flush();
+        return Response.ok(that.getId()).build();
     }
 
     public Response delete(@PathParam(ID) final String id) {
@@ -81,12 +79,10 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
         }
 
         final EntityManager entityManager = LookUp.getEntityManager();
-        final T entity = entityManager.find(getEntityClass(), that.getId(), LockModeType.PESSIMISTIC_WRITE);
-        if (entity != null) {
-            entityManager.remove(entity);
-            entityManager.flush();
-        }
-        return Response.ok().build();
+        entityManager.lock(that, LockModeType.PESSIMISTIC_WRITE);
+        entityManager.remove(that);
+        entityManager.flush();
+        return Response.ok(that.getId()).build();
     }
 
     public Response getField(@PathParam(ID) final String id, @PathParam(FIELD) final String fieldName) {
@@ -99,18 +95,15 @@ public abstract class EntityPaths<T extends EntityBase<T>> extends ViewPaths<T> 
     }
 
     public Response setField(@PathParam(ID) final String id, @PathParam(FIELD) final String fieldName, final T that) {
-        final T e = getById(id);
-        if (e == null) {
+        final T entity = getById(id);
+        if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         final EntityManager entityManager = LookUp.getEntityManager();
-        final EntityBase entity = entityManager.find(getEntityClass(), e.getId(), LockModeType.PESSIMISTIC_WRITE);
-        if (entity != null) {
-            setFieldValue(entity, fieldName, that);
-            entityManager.flush();
-        }
-
-        return Response.ok().build();
+        entityManager.lock(entity, LockModeType.PESSIMISTIC_WRITE);
+        setFieldValue(entity, fieldName, that);
+        entityManager.flush();
+        return Response.ok(entity.getId()).build();
     }
 
     protected Object getFieldValue(final EntityBase that, final String fieldName) {

@@ -11,6 +11,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +39,8 @@ public class ExceptionHandler implements ExceptionMapper<Throwable> {
             return handle((DefaultOptionsMethodException) throwable);
         } else if (throwable instanceof UnauthorizedException) {
             return handle((UnauthorizedException) throwable);
+        } else if (throwable instanceof SQLException) {
+            return handle((SQLException) throwable);
         } else if (throwable instanceof JDBCException) {
             return handle((JDBCException) throwable);
         } else if (throwable instanceof EJBTransactionRolledbackException) {
@@ -50,6 +53,10 @@ public class ExceptionHandler implements ExceptionMapper<Throwable> {
             log.log(Level.SEVERE, throwable.getMessage(), throwable);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private static Response handle(final SQLException ex) {
+        return Response.status(Response.Status.EXPECTATION_FAILED).entity(ex.getMessage()).build();
     }
 
     private static Response handle(final IllegalArgumentException ex) {

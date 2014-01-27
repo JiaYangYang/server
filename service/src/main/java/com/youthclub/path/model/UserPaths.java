@@ -23,7 +23,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  * @author Frank <frank@baileyroberts.com.au>
  */
 @Path(UserPaths.PATH)
-@RolesAllowed(RoleType.ALL)
+@RolesAllowed(RoleType.ADMIN)
 public class UserPaths extends EntityPaths<User> {
 
     private static final Logger log = Logger.getLogger(UserPaths.class.getName());

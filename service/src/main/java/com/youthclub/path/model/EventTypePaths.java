@@ -1,9 +1,11 @@
 package com.youthclub.path.model;
 
 import com.youthclub.annotation.RolesAllowed;
+import com.youthclub.authentication.Authenticator;
 import com.youthclub.model.EventType;
 import com.youthclub.model.support.RoleType;
 import com.youthclub.path.EntityPaths;
+import com.youthclub.resource.LookUpExtension;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,7 +26,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  * @author Frank <frank@baileyroberts.com.au>
  */
 @Path(EventTypePaths.PATH)
-@RolesAllowed(RoleType.ALL)
+@RolesAllowed(RoleType.ADMIN)
 public class EventTypePaths extends EntityPaths<EventType> {
 
     private static final Logger log = Logger.getLogger(EventTypePaths.class.getName());
@@ -48,6 +50,10 @@ public class EventTypePaths extends EntityPaths<EventType> {
     @Produces(APPLICATION_JSON)
     @Consumes({APPLICATION_JSON, APPLICATION_FORM_URLENCODED})
     public Response post(final EventType that) {
+        final Authenticator authenticator = LookUpExtension.getResourceHolder().getAuthenticator();
+        that.setDisabled(null);
+        that.setCreated(new Date());
+        that.setUser(authenticator.getCurrentUser());
         return super.post(that);
     }
 
@@ -70,7 +76,7 @@ public class EventTypePaths extends EntityPaths<EventType> {
     @Produces(APPLICATION_JSON)
     public Response delete(@PathParam(ID) final String id) {
         EventType that = getById(id);
-        if (that != null) {
+        if (that != null && that.getDisabled() == null) {
             that.setDisabled(new Date());
             return Response.ok(that.getId()).build();
         }
