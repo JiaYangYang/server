@@ -3,7 +3,7 @@ package com.youthclub.scheduler;
 import com.youthclub.lookup.LookUp;
 import com.youthclub.model.Session;
 
-import javax.annotation.PostConstruct;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import java.util.List;
 @Startup
 public class SessionDataCleaner {
 
-    @PostConstruct
+    @Schedule(hour = "1", persistent = false)
     public void run() {
         final EntityManager entityManager = LookUp.getEntityManager();
         final Calendar calendar = Calendar.getInstance();

@@ -3,19 +3,12 @@ package com.youthclub.path.model;
 import com.youthclub.annotation.RolesAllowed;
 import com.youthclub.authentication.Authenticator;
 import com.youthclub.lookup.LookUp;
-import com.youthclub.model.EventType;
+import com.youthclub.model.EventInstance;
 import com.youthclub.model.support.RoleType;
 import com.youthclub.path.EntityPaths;
 import com.youthclub.resource.LookUpExtension;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -26,18 +19,18 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 /**
  * @author Frank <frank@baileyroberts.com.au>
  */
-@Path(EventTypePaths.PATH)
-@RolesAllowed(RoleType.ADMIN)
-public class EventTypePaths extends EntityPaths<EventType> {
+@Path(EventInstancePaths.PATH)
+@RolesAllowed(RoleType.ALL)
+public class EventInstancePaths extends EntityPaths<EventInstance> {
 
-    private static final Logger log = Logger.getLogger(EventTypePaths.class.getName());
+    private static final Logger log = Logger.getLogger(EventInstancePaths.class.getName());
 
-    public static final String PATH = "event_type";
+    public static final String PATH = "event_instance";
     public static final String ACTIVE = "active";
 
     @Override
-    protected Class<EventType> getEntityClass() {
-        return EventType.class;
+    protected Class<EventInstance> getEntityClass() {
+        return EventInstance.class;
     }
 
     @GET
@@ -46,7 +39,7 @@ public class EventTypePaths extends EntityPaths<EventType> {
     public Response active() {
         return Response.ok(
                 LookUp.getEntityManager()
-                        .createNamedQuery("EventType.active")
+                        .createNamedQuery("EventInstance.active")
                         .getResultList()
         ).build();
     }
@@ -62,11 +55,12 @@ public class EventTypePaths extends EntityPaths<EventType> {
     @Path(ROOT)
     @Produces(APPLICATION_JSON)
     @Consumes({APPLICATION_JSON, APPLICATION_FORM_URLENCODED})
-    public Response post(final EventType that) {
+    public Response post(@FormParam("data") String serializable) {
+        final EventInstance that = new EventInstance();
         final Authenticator authenticator = LookUpExtension.getResourceHolder().getAuthenticator();
-        that.setDisabled(null);
         that.setCreated(new Date());
         that.setUser(authenticator.getCurrentUser());
+        that.setSerializable(serializable);
         return super.post(that);
     }
 
@@ -77,18 +71,20 @@ public class EventTypePaths extends EntityPaths<EventType> {
         return super.get(id);
     }
 
+    @RolesAllowed(RoleType.ADMIN)
     @PUT
     @Path(BY_ID)
     @Produces(APPLICATION_JSON)
-    public Response put(@PathParam(ID) final String id, final EventType that) {
+    public Response put(@PathParam(ID) final String id, final EventInstance that) {
         return super.put(id, that);
     }
 
+    @RolesAllowed(RoleType.ADMIN)
     @DELETE
     @Path(BY_ID)
     @Produces(APPLICATION_JSON)
     public Response delete(@PathParam(ID) final String id) {
-        EventType that = getById(id);
+        EventInstance that = getById(id);
         if (that != null && that.getDisabled() == null) {
             that.setDisabled(new Date());
             return Response.ok(that.getId()).build();

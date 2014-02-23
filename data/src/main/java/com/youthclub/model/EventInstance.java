@@ -1,5 +1,10 @@
 package com.youthclub.model;
 
+import com.youthclub.annotation.AttributeAccess;
+import com.youthclub.annotation.support.AccessLevel;
+import com.youthclub.annotation.support.Permission;
+import com.youthclub.model.support.RoleType;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,22 +13,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
- * Created by frank on 14-1-26.
+ * @author Frank <frank@baileyroberts.com.au>
  */
 @Entity
 @Table(name = "event_instance", schema = "public")
+@NamedQueries({
+        @NamedQuery(name = "EventInstance.active", query = "SELECT e FROM EventInstance e WHERE e.disabled is NULL order by e.created desc"),
+        @NamedQuery(name = "EventInstance.withUser", query = "SELECT e FROM EventInstance e WHERE e.user=:user order by e.created desc")
+})
 public class EventInstance extends EntityBase<EventInstance> {
     private int id;
-    private String name;
+    private String serializable;
     private Date created;
+    private boolean verified;
     private Date disabled;
-    private EventTemplateVersion eventTemplateVersion;
     private User user;
 
     @Id
@@ -38,13 +49,13 @@ public class EventInstance extends EntityBase<EventInstance> {
     }
 
     @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
+    @Column(name = "serializable")
+    public String getSerializable() {
+        return serializable;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSerializable(String serializable) {
+        this.serializable = serializable;
     }
 
     @Basic
@@ -59,8 +70,24 @@ public class EventInstance extends EntityBase<EventInstance> {
     }
 
     @Basic
+    @Column(name = "verified", nullable = false)
+    @AttributeAccess(
+            @Permission(roleType = RoleType.ADMIN, accessLevel = {AccessLevel.ALL})
+    )
+    public boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    @Basic
     @Column(name = "disabled")
     @Temporal(TemporalType.TIMESTAMP)
+    @AttributeAccess(
+            @Permission(roleType = RoleType.ADMIN, accessLevel = {AccessLevel.ALL})
+    )
     public Date getDisabled() {
         return disabled;
     }
@@ -70,17 +97,10 @@ public class EventInstance extends EntityBase<EventInstance> {
     }
 
     @ManyToOne
-    @JoinColumn(name = "event_template_version_id", referencedColumnName = "id", nullable = false)
-    public EventTemplateVersion getEventTemplateVersion() {
-        return eventTemplateVersion;
-    }
-
-    public void setEventTemplateVersion(EventTemplateVersion eventTemplateVersion) {
-        this.eventTemplateVersion = eventTemplateVersion;
-    }
-
-    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @AttributeAccess(
+            @Permission(roleType = RoleType.ADMIN, accessLevel = {AccessLevel.ALL})
+    )
     public User getUser() {
         return user;
     }
