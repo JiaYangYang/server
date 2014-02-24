@@ -7,20 +7,21 @@
 #fi
 
 
-JBOSS_HOME=/Users/frank/Servers/latest
+JBOSS_HOME=/home/frank/Servers/wildfly-8.0.0.Final
 PROJECT_NAME=server
-PROJECT_HOME=/Users/frank/Projects/$PROJECT_NAME
-#HTML_HOME=/var/www/html
+PROJECT_HOME=/home/frank/Projects/$PROJECT_NAME
+CLIENT_HOME=/home/frank/Projects/client
+HTML_HOME=/var/www/html
 
-#sudo rm -rf $HTML_HOME/$PROJECT_NAME
-#sudo cp -r $PROJECT_HOME/web/src $HTML_HOME/$PROJECT_NAME
+sudo rm -rf $HTML_HOME/$CLIENT_HOME
+sudo cp -r $CLIENT_HOME $HTML_HOME/
 
-JAVA_OPTS="-server -XX:+UseCompressedOops -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=1024m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
+JAVA_OPTS="-server -XX:+UseCompressedOops -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=1024m -Djava.net.preferIPv4Stack=true"
 export JAVA_OPTS
 
 cd $PROJECT_HOME
 mvn clean install -Dmaven.test.skip=true
+rm $JBOSS_HOME/standalone/deployments/$PROJECT_NAME.ear.*
 ln -s $PROJECT_HOME/resources/target/$PROJECT_NAME.ear $JBOSS_HOME/standalone/deployments/$PROJECT_NAME.ear
-rm $JBOSS_HOME/standalone/deployments/*.failed
 
 $JBOSS_HOME/bin/standalone.sh

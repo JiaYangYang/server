@@ -35,11 +35,6 @@
 
             <property name="jboss.entity.manager.jndi.name" value="java:/MainEntityManager"/>
             <property name="jboss.entity.manager.factory.jndi.name" value="java:/MainEntityManagerFactory"/>
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/web_app"/>
-            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="hibernate.connection.username" value="web_user"/>
-            <property name="hibernate.connection.password" value="9b837fb78bdeaba6abfce6a8e943f43092b366ad"/>
-
 
             <!--<property name="hibernate.ejb.event.post-load" value="com.youthclub.data.listener.SecurityListener"/>-->
         </properties>

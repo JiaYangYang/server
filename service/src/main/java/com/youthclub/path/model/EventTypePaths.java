@@ -1,7 +1,8 @@
 package com.youthclub.path.model;
 
 import com.youthclub.annotation.RolesAllowed;
-import com.youthclub.model.UserRole;
+import com.youthclub.lookup.LookUp;
+import com.youthclub.model.EventType;
 import com.youthclub.model.support.RoleType;
 import com.youthclub.path.EntityPaths;
 
@@ -22,19 +23,21 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 /**
  * @author Frank <frank@baileyroberts.com.au>
  */
-@Path(UserRolePaths.PATH)
-@RolesAllowed(RoleType.ADMIN)
-public class UserRolePaths extends EntityPaths<UserRole> {
+@Path(EventTypePaths.PATH)
+@RolesAllowed(RoleType.ALL)
+public class EventTypePaths extends EntityPaths<EventType> {
 
-    private static final Logger log = Logger.getLogger(UserRolePaths.class.getName());
+    private static final Logger log = Logger.getLogger(EventTypePaths.class.getName());
 
-    public static final String PATH = "user_role";
+    public static final String PATH = "event_type";
+    public static final String ACTIVE = "active";
 
     @Override
-    protected Class<UserRole> getEntityClass() {
-        return UserRole.class;
+    protected Class<EventType> getEntityClass() {
+        return EventType.class;
     }
 
+    @RolesAllowed(RoleType.ADMIN)
     @GET
     @Path(ROOT)
     @Produces(APPLICATION_JSON)
@@ -42,11 +45,23 @@ public class UserRolePaths extends EntityPaths<UserRole> {
         return super.get();
     }
 
+    @GET
+    @Path(ACTIVE)
+    @Produces(APPLICATION_JSON)
+    public Response active() {
+        return Response.ok(
+                LookUp.getEntityManager()
+                        .createNamedQuery("EventType.active")
+                        .getResultList()
+        ).build();
+    }
+
+    @RolesAllowed(RoleType.ADMIN)
     @POST
     @Path(ROOT)
     @Produces(APPLICATION_JSON)
     @Consumes({APPLICATION_JSON, APPLICATION_FORM_URLENCODED})
-    public Response post(final UserRole that) {
+    public Response post(final EventType that) {
         return super.post(that);
     }
 
@@ -57,13 +72,15 @@ public class UserRolePaths extends EntityPaths<UserRole> {
         return super.get(id);
     }
 
+    @RolesAllowed(RoleType.ADMIN)
     @PUT
     @Path(BY_ID)
     @Produces(APPLICATION_JSON)
-    public Response put(@PathParam(ID) final String id, final UserRole that) {
+    public Response put(@PathParam(ID) final String id, final EventType that) {
         return super.put(id, that);
     }
 
+    @RolesAllowed(RoleType.ADMIN)
     @DELETE
     @Path(BY_ID)
     @Produces(APPLICATION_JSON)
